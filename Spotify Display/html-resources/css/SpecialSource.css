@@ -1,0 +1,93 @@
+﻿body {
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    font-size: 3vmin;
+    text-shadow: 0px 3px 4px rgba(0, 0, 0, 0.5);
+}
+
+.background-image {
+    width: 120vw;
+    height: 120vh;
+    filter: blur(40px) brightness(60%);
+    overflow: hidden;
+    position: absolute;
+    left: -10vw;
+    top: -10vh;
+}
+
+.foreground-image {
+    width: 60vmin;
+    height: 60vmin;
+    position: absolute;
+    top: 10vh;
+    left: 50%;
+    right: 50%;
+    margin-left: -30vmin;
+    margin-right: 30vmin;
+    box-shadow: 0px 21px 31px 0px rgba(0,0,0,0.5);
+}
+
+.two {
+    display: none;
+}
+
+
+.track {
+    width: 100vw;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 75vh;
+}
+
+.artist {
+    width: 100vw;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 80vh;
+}
+
+.album {
+    width: 100vw;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 85vh;
+}
+
+.detector {
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 10vh;
+}
+
+.toggle-fullscreen {
+    padding-top:2vh;
+    cursor:pointer;
+    width: 100vw;
+    position: absolute;
+    text-align: center;
+    vertical-align:bottom;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 5vh;
+    background-color: rgba(0,0,0,0.5);
+    -webkit-transition-property: top, bottom;
+    -webkit-transition-duration: 0.5s;
+    -webkit-user-select: none;
+}
+
+    .toggle-fullscreen.off-screen {
+        top: -7vh;
+    }

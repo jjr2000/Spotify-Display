@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Spotify Info</title>
+
+    <link href="../css/SpecialSource.css" rel="stylesheet">
+</head>
+<body>
+    <img src="../images/default.png" class="background-image one" />
+    <img src="../images/default.png" class="background-image two" />
+
+    <img src="../images/default.png" class="foreground-image one" />
+    <img src="../images/default.png" class="foreground-image two" />
+
+    <div class="detector">
+        <div class="toggle-fullscreen">Click me to toggle full screen</div>
+    </div>
+
+    <div class="track">Loading...</div>
+    <div class="artist"></div>
+    <div class="album"></div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../js/jquery-3.1.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+
+        setTimeout(function () {
+            $(".toggle-fullscreen").addClass("off-screen");
+        }, 1000)
+
+
+        $(".detector").hover(function () {
+            $(".toggle-fullscreen").removeClass("off-screen");
+        }, function () {
+            $(".toggle-fullscreen").addClass("off-screen");
+        });
+
+        $("body").on("click", ".toggle-fullscreen", function () {
+            talkbackJs.toggleFullscreen();
+        });
+
+
+        $(document).keyup(function (e) {
+            if (e.keyCode == 27) { // escape key maps to keycode `27`
+                talkbackJs.toggleFullscreen();
+            }
+        });
+
+        var changeNo = "one";
+
+        function ChangeImage(src) {
+            if (changeNo === "one") {
+                $(".background-image.two").attr("src", src).fadeIn(400);
+                $(".background-image.one").fadeOut(400);
+                $(".foreground-image.two").attr("src", src).fadeIn(400);
+                $(".foreground-image.one").fadeOut(400);
+                changeNo = "two"
+            } else {
+                $(".background-image.one").attr("src", src).fadeIn(400);
+                $(".background-image.two").fadeOut(400);
+                $(".foreground-image.one").attr("src", src).fadeIn(400);
+                $(".foreground-image.two").fadeOut(400);
+                changeNo = "one"
+            }
+        }
+
+        function ChangeText(track, artist, album)
+        {
+            $('.track').text(track);
+            $('.artist').text(artist);
+            $('.album').text(album);
+        }
+
+    </script>
+
+</body>
+</html>
