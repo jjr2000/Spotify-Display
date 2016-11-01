@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,12 @@ namespace Spotify_Display
             InililizeChromium();
             SpotHelp SpotHelp = new SpotHelp();
             SpotHelp.Start();
+
+            Thread SpotLoop = new Thread(new ThreadStart(SpotHelp.UpdateLoop));
+
+            SpotLoop.Start();
+            SpotLoop.IsBackground = true;
+
         }
 
         public void InililizeChromium()
@@ -57,7 +64,6 @@ namespace Spotify_Display
                 browserSettings.UniversalAccessFromFileUrls = CefState.Enabled;
                 Config.chromeBrowser.BrowserSettings = browserSettings;
                 Config.chromeBrowser.RegisterJsObject("talkbackJs", new TalkbackJs());
-
             }
         }
 
@@ -105,21 +111,21 @@ namespace Spotify_Display
             Config.Player = new Spotify();
             Config.Player.Load();
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            UpdateLoop();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            //#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            //            UpdateLoop();
+            //#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
         }
 
-        private async Task UpdateLoop()
+        public void UpdateLoop()
         {
             while (true)
             {
-
-                Config.Player.Update();
-
-                // don't run again for at least 200 milliseconds
-                await Task.Delay(1000);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Config.Player.Update();
+                });
+                System.Threading.Thread.Sleep(1000);
             }
         }
     }
