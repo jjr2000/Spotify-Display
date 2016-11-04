@@ -62,9 +62,28 @@
         });
 
         $(document).keyup(function (e) {
-            if (e.keyCode == 27) { // escape key maps to keycode `27`
+            // escape key maps to keycode `27`
+            if (e.keyCode == 27)
+            {
                 talkbackJs.toggleFullscreen();
             }
+            // (space) key maps to keycode `32`
+            // down key maps to keycode `40`
+            if (e.keyCode == 32 || e.keyCode == 40)
+            {
+                talkbackJs.playPause();
+            }
+
+            // left key maps to keycode `37`
+            if (e.keyCode == 37) {
+                talkbackJs.prev();
+            }
+
+            // right key maps to keycode `39`
+            if (e.keyCode == 39) {
+                talkbackJs.next();
+            }
+
         });
 
         var changeNo = "one";
