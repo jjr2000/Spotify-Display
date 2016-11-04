@@ -119,7 +119,7 @@ body {
 .toggle-fullscreen {
     padding-top: 2vh;
     cursor: pointer;
-    width: calc( 100vw - 200px );
+    width: calc( 100vw - 30vmin );
     position: absolute;
     text-align: center;
     vertical-align: bottom;
@@ -139,7 +139,7 @@ body {
     .toggle-controls {
     padding-top: 2vh;
     cursor: pointer;
-    width: 200px;
+    width: 30vmin;
     position: absolute;
     text-align: center;
     vertical-align: bottom;
