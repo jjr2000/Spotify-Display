@@ -1,60 +1,46 @@
 ﻿@font-face {
-  font-family: "spoticon";
-  src: url("spoticon.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+    font-family: "spoticon";
+    src: url("spoticon.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }
+
 [class^="spoticon-"]:before,
 [class*=" spoticon-"]:before {
-  font-family: "spoticon";
-  font-style: normal;
-  font-weight: normal;
-  -webkit-font-smoothing: antialiased;
-  line-height: inherit;
-  vertical-align: bottom;
-  display: inline-block;
-  text-decoration: inherit;
+    font-family: "spoticon";
+    font-style: normal;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    line-height: inherit;
+    vertical-align: bottom;
+    display: inline-block;
+    text-decoration: inherit;
+    padding: 10px;
+    font-size: 32px;
 }
 
 .spoticon-skip-back:before {
-  content: "\f147";
-  font-size: 32px;
+    content: "\f147";
 }
 
 .spoticon-skip-forward:before {
-  content: "\f149";
-  font-size: 32px;
-}
-
-.spoticon-play {
-    position:relative;
+    content: "\f149";
 }
 
 .spoticon-play:before {
-  content: "\f133";
-  font-size: 32px;
-}
-
-.spoticon-play:after {
-    content: ' ';
-    border-radius: 500px;
-    position: absolute;
-    top: -1px;
-    right: -1px;
-    bottom: -1px;
-    width:32px;
-    -webkit-transform: translate(0.5px, 0);
-    -moz-transform: translate(0.5px, 0);
-    -ms-transform: translate(0.5px, 0);
-    -o-transform: translate(0.5px, 0);
-    transform: translate(0.5px, 0);
-    display: block;
-    border: 1px solid #88898c;
+    content: "\f133";
+    border: solid;
+    border-width: 1px;
+    border-color: white;
+    border-radius: 100px;
 }
 
 .spoticon-pause:before {
-  content: "\f131";
-  font-size: 32px;
+    content: "\f131";
+    border: solid;
+    border-width: 1px;
+    border-color: white;
+    border-radius: 100px;
 }
 
 body {
@@ -131,14 +117,13 @@ body {
 }
 
 .toggle-fullscreen {
-    padding-top:2vh;
-    cursor:pointer;
-    width: 100vw;
+    padding-top: 2vh;
+    cursor: pointer;
+    width: calc( 100vw - 200px );
     position: absolute;
     text-align: center;
-    vertical-align:bottom;
+    vertical-align: bottom;
     left: 0;
-    right: 0;
     top: 0;
     height: 5vh;
     background-color: rgba(0,0,0,0.5);
@@ -151,11 +136,38 @@ body {
         top: -7vh;
     }
 
-.controls {
-    position:absolute;
-    bottom:0;
-    left:0;
-    width:100%;
-    text-align:right;
+    .toggle-controls {
+    padding-top: 2vh;
+    cursor: pointer;
+    width: 200px;
+    position: absolute;
+    text-align: center;
+    vertical-align: bottom;
+    right: 0;
+    top: 0;
+    height: 5vh;
+    border-left:solid white 1px;
+    background-color: rgba(0,0,0,0.5);
+    -webkit-transition-property: top, bottom;
+    -webkit-transition-duration: 0.5s;
+    -webkit-user-select: none;
 }
 
+    .toggle-controls.off-screen {
+        top: -7vh;
+    }
+
+.controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: right;
+    padding-bottom:10px;
+    display:none;
+}
+
+.controls > * {
+    display: inline-block;
+    cursor:pointer;
+}

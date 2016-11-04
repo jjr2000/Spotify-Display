@@ -27,19 +27,6 @@ namespace Spotify_Display
 
     internal static class UnsafeNativeMethods
     {
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool RegisterHotKey(
-            [In] [Optional] IntPtr windowHandle,
-            [In] int id,
-            [In] uint modifier,
-            [In] uint key);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool UnregisterHotKey(
-            [In] [Optional] IntPtr windowHandle,
-            [In] int id);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern IntPtr FindWindow(
@@ -58,5 +45,6 @@ namespace Spotify_Display
             [In] uint message,
             [In] IntPtr wParam,
             [In] IntPtr lParam);
+
     }
 }

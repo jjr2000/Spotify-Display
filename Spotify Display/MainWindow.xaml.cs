@@ -97,6 +97,19 @@ namespace Spotify_Display
                 }
             }
 
+            public void playPause()
+            {
+                Config.Player.PlayOrPauseTrack();
+            }
+
+            public void next() {
+                Config.Player.ChangeToNextTrack();
+            }
+
+            public void prev()
+            {
+                Config.Player.ChangeToPreviousTrack();
+            }
 
         }
 

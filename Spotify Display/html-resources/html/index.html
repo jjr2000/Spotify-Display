@@ -19,6 +19,7 @@
 
     <div class="detector">
         <div class="toggle-fullscreen">Click me to toggle full screen</div>
+        <div class="toggle-controls">toggle controls</div>
     </div>
 
     <div class="track">Loading...</div>
@@ -26,9 +27,9 @@
     <div class="album"></div>
 
     <div class="controls">
-        <div class="spoticon-skip-back"></div>
-        <div class="spoticon-play"></div>
-        <div class="spoticon-skip-forward"></div>
+        <div class="spoticon-skip-back" onclick="talkbackJs.prev()"></div>
+        <div class="play-pause spoticon-play" onclick="talkbackJs.playPause()"></div>
+        <div class="spoticon-skip-forward" onclick="talkbackJs.next()"></div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -40,19 +41,25 @@
 
         setTimeout(function () {
             $(".toggle-fullscreen").addClass("off-screen");
+            $(".toggle-controls").addClass("off-screen");
         }, 1000)
 
 
         $(".detector").hover(function () {
             $(".toggle-fullscreen").removeClass("off-screen");
+            $(".toggle-controls").removeClass("off-screen");
         }, function () {
             $(".toggle-fullscreen").addClass("off-screen");
+            $(".toggle-controls").addClass("off-screen");
         });
 
         $("body").on("click", ".toggle-fullscreen", function () {
             talkbackJs.toggleFullscreen();
         });
 
+        $("body").on("click", ".toggle-controls", function () {
+            $(".controls").fadeToggle();
+        });
 
         $(document).keyup(function (e) {
             if (e.keyCode == 27) { // escape key maps to keycode `27`
@@ -83,6 +90,12 @@
             $('.track').text(track);
             $('.artist').text(artist);
             $('.album').text(album);
+
+            if (track == "No Track Is Currently Playing") {
+                $(".play-pause").removeClass("spoticon-pause").addClass("spoticon-play");
+            } else {
+                $(".play-pause").removeClass("spoticon-play").addClass("spoticon-pause");
+            }
         }
 
     </script>
