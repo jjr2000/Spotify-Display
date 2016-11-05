@@ -83,8 +83,13 @@ namespace Spotify_Display
                                         {
                                             string temptitle = spotifyTitle.Split('(')[0].Trim();
 
-                                            temptitle = ReplaceString(temptitle, "radio", "", StringComparison.CurrentCultureIgnoreCase);
-                                            temptitle = ReplaceString(temptitle, "edit", "", StringComparison.CurrentCultureIgnoreCase);
+                                            string[] temptitleAr = temptitle.Split('-');
+
+                                            if (temptitleAr.Count() > 1)
+                                            {
+                                                temptitle = temptitleAr[0] + "-" + temptitleAr[1];
+                                                temptitle = temptitle.Trim();
+                                            }
 
                                             this.DownloadJson(temptitle);
 
@@ -129,9 +134,13 @@ namespace Spotify_Display
                                     else
                                     {
                                         string temptitle = spotifyTitle.Split('(')[0].Trim();
+                                        string[] temptitleAr = temptitle.Split('-');
 
-                                        temptitle = ReplaceString(temptitle, "radio", "", StringComparison.CurrentCultureIgnoreCase);
-                                        temptitle = ReplaceString(temptitle, "edit", "", StringComparison.CurrentCultureIgnoreCase);
+                                        if (temptitleAr.Count() > 1)
+                                        {
+                                            temptitle = temptitleAr[0] + "-" + temptitleAr[1];
+                                            temptitle = temptitle.Trim();
+                                        }
 
                                         this.DownloadJson(temptitle);
 
@@ -176,10 +185,13 @@ namespace Spotify_Display
                                 else
                                 {
                                     string temptitle = spotifyTitle.Split('(')[0].Trim();
+                                    string[] temptitleAr = temptitle.Split('-');
 
-                                    temptitle = ReplaceString(temptitle, "radio", "", StringComparison.CurrentCultureIgnoreCase);
-                                    temptitle = ReplaceString(temptitle, "edit", "", StringComparison.CurrentCultureIgnoreCase);
-
+                                    if (temptitleAr.Count() > 1)
+                                    {
+                                        temptitle = temptitleAr[0] + "-" + temptitleAr[1];
+                                        temptitle = temptitle.Trim();
+                                    }
                                     this.DownloadJson(temptitle);
 
                                     if (!string.IsNullOrEmpty(this.json))
