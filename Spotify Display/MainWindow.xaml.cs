@@ -33,9 +33,8 @@ namespace Spotify_Display
             SpotHelp.Start();
 
             Thread SpotLoop = new Thread(new ThreadStart(SpotHelp.UpdateLoop));
-
-            SpotLoop.Start();
             SpotLoop.IsBackground = true;
+            SpotLoop.Start();
 
         }
 
@@ -113,6 +112,11 @@ namespace Spotify_Display
 
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Cef.Shutdown();
+            Environment.Exit(Environment.ExitCode);
+        }
     }
 
     class SpotHelp
