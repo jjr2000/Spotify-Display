@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using CefSharp;
 using CefSharp.Wpf;
+using System.Linq;
 
 namespace Spotify_Display
 {
@@ -29,6 +30,9 @@ namespace Spotify_Display
 
                 if (Config.chromeBrowser.IsBrowserInitialized && !Config.chromeBrowser.IsDisposed)
                 {
+
+                    text = text.Replace("'", "\\'");
+
                     string script = "ChangeText('" + text + "', '', '');ChangeImage('../images/default.png');";
                     var task = Config.chromeBrowser.EvaluateScriptAsync(script, 1000);
                     task.Wait();
@@ -48,6 +52,7 @@ namespace Spotify_Display
                 // Write the song title and artist to a text file.
                 if (Config.chromeBrowser.IsBrowserInitialized && !Config.chromeBrowser.IsDisposed)
                 {
+                    text = text.Replace("'", "\\'");
                     string script = "ChangeText('" + text + "', '', '');";
                     var task = Config.chromeBrowser.EvaluateScriptAsync(script, 1000);
                     task.Wait();
@@ -87,9 +92,9 @@ namespace Spotify_Display
 
                 if (Config.chromeBrowser.IsBrowserInitialized && !Config.chromeBrowser.IsDisposed)
                 {
-                    //title = title.Replace("'", "");
-                    //artist = artist.Replace("'", "");
-                    //album = album.Replace("'", "");
+                    title = title.Replace("'", "\\'");
+                    artist = artist.Replace("'", "\\'");
+                    album = album.Replace("'", "\\'");
 
                     string script = "ChangeText(\"" + title + "\", \"" + artist + "\", \"" + album + "\");";
                     var task = Config.chromeBrowser.EvaluateScriptAsync(script, 1000);
@@ -119,21 +124,21 @@ namespace Spotify_Display
                 title = title.Replace(@"Spotify - ", " ");
 
                 // title = title.Replace(@".", " "); // Causes failed search result from Spotify
-                title = title.Replace(@"/", " ");
-                title = title.Replace(@"\", " ");
-                title = title.Replace(@",", " ");
+                title = title.Replace(@"/", "%2F");
+                title = title.Replace(@"\", "%5C");
+                title = title.Replace(@",", "%B4");
                 // title = title.Replace(@"'", " "); // Causes failed search result from Spotify
-                title = title.Replace(@"(", " ");
-                title = title.Replace(@")", " ");
-                title = title.Replace(@"[", " ");
-                title = title.Replace(@"]", " ");
-                title = title.Replace(@"!", " ");
-                title = title.Replace(@"$", " ");
-                title = title.Replace(@"%", " ");
-                title = title.Replace(@"&", " ");
-                title = title.Replace(@"?", " ");
-                title = title.Replace(@":", " ");
-                title = title.Replace(@"*", " ");
+                title = title.Replace(@"(", "%28");
+                title = title.Replace(@")", "%29");
+                title = title.Replace(@"[", "%5B");
+                title = title.Replace(@"]", "%5D");
+                title = title.Replace(@"!", "%21");
+                title = title.Replace(@"$", "%24");
+                title = title.Replace(@"%", "%25");
+                title = title.Replace(@"&", "%26");
+                title = title.Replace(@"?", "%3F");
+                title = title.Replace(@":", "%3A");
+                title = title.Replace(@"*", "%2A");
 
                 title = CompactWhitespace(title);
 

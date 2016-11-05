@@ -81,17 +81,143 @@ namespace Spotify_Display
                                         }
                                         else
                                         {
-                                            // In the event of an advertisement (or any song that returns 0 results)
-                                            // then we'll just write the whole title as a single string instead.
+                                            string temptitle = spotifyTitle.Split('(')[0].Trim();
+
+                                            temptitle = ReplaceString(temptitle, "radio", "", StringComparison.CurrentCultureIgnoreCase);
+                                            temptitle = ReplaceString(temptitle, "edit", "", StringComparison.CurrentCultureIgnoreCase);
+
+                                            this.DownloadJson(temptitle);
+
+                                            if (!string.IsNullOrEmpty(this.json))
+                                            {
+                                                dynamic jsonSummary2 = SimpleJson.DeserializeObject(this.json);
+
+                                                if (jsonSummary2 != null)
+                                                {
+                                                    var numberOfResults2 = jsonSummary2.tracks.total;
+
+                                                    if (numberOfResults2 > 0)
+                                                    {
+                                                        jsonSummary2 = SimpleJson.DeserializeObject(jsonSummary2.tracks["items"].ToString());
+
+                                                        int mostPopular = SelectTrackByPopularity(jsonSummary2, temptitle);
+
+                                                        OutputControl.UpdateText(
+                                                            jsonSummary2[mostPopular].name.ToString(),
+                                                            jsonSummary2[mostPopular].artists[0].name.ToString(),
+                                                            jsonSummary2[mostPopular].album.name.ToString(),
+                                                            jsonSummary2[mostPopular].id.ToString());
+
+                                                        this.DownloadSpotifyAlbumArtwork(jsonSummary2[mostPopular].album);
+                                                    }
+                                                    else
+                                                    {
+                                                        // In the event of an advertisement (or any song that returns 0 results)
+                                                        // then we'll just write the whole title as a single string instead.
+                                                        OutputControl.UpdateTextAndEmptyFilesMaybe(spotifyTitle);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // For whatever reason the JSON file couldn't download
+                                                // In the event this happens we'll just display Spotify's window title as the track
+                                                OutputControl.UpdateTextAndEmptyFilesMaybe(spotifyTitle);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        string temptitle = spotifyTitle.Split('(')[0].Trim();
+
+                                        temptitle = ReplaceString(temptitle, "radio", "", StringComparison.CurrentCultureIgnoreCase);
+                                        temptitle = ReplaceString(temptitle, "edit", "", StringComparison.CurrentCultureIgnoreCase);
+
+                                        this.DownloadJson(temptitle);
+
+                                        if (!string.IsNullOrEmpty(this.json))
+                                        {
+                                            dynamic jsonSummary2 = SimpleJson.DeserializeObject(this.json);
+
+                                            if (jsonSummary2 != null)
+                                            {
+                                                var numberOfResults2 = jsonSummary2.tracks.total;
+
+                                                if (numberOfResults2 > 0)
+                                                {
+                                                    jsonSummary2 = SimpleJson.DeserializeObject(jsonSummary2.tracks["items"].ToString());
+
+                                                    int mostPopular = SelectTrackByPopularity(jsonSummary2, temptitle);
+
+                                                    OutputControl.UpdateText(
+                                                        jsonSummary2[mostPopular].name.ToString(),
+                                                        jsonSummary2[mostPopular].artists[0].name.ToString(),
+                                                        jsonSummary2[mostPopular].album.name.ToString(),
+                                                        jsonSummary2[mostPopular].id.ToString());
+
+                                                    this.DownloadSpotifyAlbumArtwork(jsonSummary2[mostPopular].album);
+                                                }
+                                                else
+                                                {
+                                                    // In the event of an advertisement (or any song that returns 0 results)
+                                                    // then we'll just write the whole title as a single string instead.
+                                                    OutputControl.UpdateTextAndEmptyFilesMaybe(spotifyTitle);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // For whatever reason the JSON file couldn't download
+                                            // In the event this happens we'll just display Spotify's window title as the track
                                             OutputControl.UpdateTextAndEmptyFilesMaybe(spotifyTitle);
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    // For whatever reason the JSON file couldn't download
-                                    // In the event this happens we'll just display Spotify's window title as the track
-                                    OutputControl.UpdateTextAndEmptyFilesMaybe(spotifyTitle);
+                                    string temptitle = spotifyTitle.Split('(')[0].Trim();
+
+                                    temptitle = ReplaceString(temptitle, "radio", "", StringComparison.CurrentCultureIgnoreCase);
+                                    temptitle = ReplaceString(temptitle, "edit", "", StringComparison.CurrentCultureIgnoreCase);
+
+                                    this.DownloadJson(temptitle);
+
+                                    if (!string.IsNullOrEmpty(this.json))
+                                    {
+                                        dynamic jsonSummary2 = SimpleJson.DeserializeObject(this.json);
+
+                                        if (jsonSummary2 != null)
+                                        {
+                                            var numberOfResults2 = jsonSummary2.tracks.total;
+
+                                            if (numberOfResults2 > 0)
+                                            {
+                                                jsonSummary2 = SimpleJson.DeserializeObject(jsonSummary2.tracks["items"].ToString());
+
+                                                int mostPopular = SelectTrackByPopularity(jsonSummary2, temptitle);
+
+                                                OutputControl.UpdateText(
+                                                    jsonSummary2[mostPopular].name.ToString(),
+                                                    jsonSummary2[mostPopular].artists[0].name.ToString(),
+                                                    jsonSummary2[mostPopular].album.name.ToString(),
+                                                    jsonSummary2[mostPopular].id.ToString());
+
+                                                this.DownloadSpotifyAlbumArtwork(jsonSummary2[mostPopular].album);
+                                            }
+                                            else
+                                            {
+                                                // In the event of an advertisement (or any song that returns 0 results)
+                                                // then we'll just write the whole title as a single string instead.
+                                                OutputControl.UpdateTextAndEmptyFilesMaybe(spotifyTitle);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // For whatever reason the JSON file couldn't download
+                                        // In the event this happens we'll just display Spotify's window title as the track
+                                        OutputControl.UpdateTextAndEmptyFilesMaybe(spotifyTitle);
+                                    }
                                 }
                             }
 
@@ -114,6 +240,26 @@ namespace Spotify_Display
                     }
                 }
             }
+        }
+
+        public static string ReplaceString(string str, string oldValue, string newValue, StringComparison comparison)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            int previousIndex = 0;
+            int index = str.IndexOf(oldValue, comparison);
+            while (index != -1)
+            {
+                sb.Append(str.Substring(previousIndex, index - previousIndex));
+                sb.Append(newValue);
+                index += oldValue.Length;
+
+                previousIndex = index;
+                index = str.IndexOf(oldValue, index, comparison);
+            }
+            sb.Append(str.Substring(previousIndex));
+
+            return sb.ToString();
         }
 
         public override void Unload()
@@ -181,7 +327,7 @@ namespace Spotify_Display
                     try
                     {
                         // There are certain characters that can cause issues with Spotify's search
-                        spotifyTitle = OutputControl.UnifyTitles(spotifyTitle);
+                        //spotifyTitle = OutputControl.UnifyTitles(spotifyTitle);
 
                         jsonWebClient.Encoding = System.Text.Encoding.UTF8;
 
