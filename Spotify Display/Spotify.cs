@@ -55,7 +55,7 @@ namespace Spotify_Display
                             }
                             else
                             {
-                                this.DownloadJson(spotifyTitle);
+                                this.DownloadJson(spotifyTitle.Split('(')[0].Trim());
 
                                 if (!string.IsNullOrEmpty(this.json))
                                 {
@@ -100,7 +100,7 @@ namespace Spotify_Display
                                                     {
                                                         jsonSummary2 = SimpleJson.DeserializeObject(jsonSummary2.tracks["items"].ToString());
 
-                                                        int mostPopular = SelectTrackByPopularity(jsonSummary2, temptitle);
+                                                        int mostPopular = SelectTrackByPopularity(jsonSummary2, spotifyTitle);
 
                                                         OutputControl.UpdateText(
                                                             jsonSummary2[mostPopular].name.ToString(),
@@ -147,7 +147,7 @@ namespace Spotify_Display
                                                 {
                                                     jsonSummary2 = SimpleJson.DeserializeObject(jsonSummary2.tracks["items"].ToString());
 
-                                                    int mostPopular = SelectTrackByPopularity(jsonSummary2, temptitle);
+                                                    int mostPopular = SelectTrackByPopularity(jsonSummary2, spotifyTitle);
 
                                                     OutputControl.UpdateText(
                                                         jsonSummary2[mostPopular].name.ToString(),
@@ -194,7 +194,7 @@ namespace Spotify_Display
                                             {
                                                 jsonSummary2 = SimpleJson.DeserializeObject(jsonSummary2.tracks["items"].ToString());
 
-                                                int mostPopular = SelectTrackByPopularity(jsonSummary2, temptitle);
+                                                int mostPopular = SelectTrackByPopularity(jsonSummary2, spotifyTitle);
 
                                                 OutputControl.UpdateText(
                                                     jsonSummary2[mostPopular].name.ToString(),
@@ -362,7 +362,8 @@ namespace Spotify_Display
 
             foreach (dynamic track in jsonSummary)
             {
-                if (windowTitle.Contains(track.artists[0].name) && windowTitle.Contains(track.name))
+                //if (windowTitle.Contains(track.artists[0].name) && windowTitle.Contains(track.name))
+                if (windowTitle.Contains(track.artists[0].name))
                 {
                     if (track.popularity > highestPopularity)
                     {
