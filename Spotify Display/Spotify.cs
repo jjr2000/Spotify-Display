@@ -17,6 +17,7 @@ namespace Spotify_Display
     internal sealed class Spotify : MediaPlayer
     {
         private string json = string.Empty;
+        private string albumjson = string.Empty;
         private bool downloadingJson = false;
 
         public override void Update()
@@ -63,21 +64,32 @@ namespace Spotify_Display
 
                                     if (jsonSummary != null)
                                     {
-                                        var numberOfResults = jsonSummary.tracks.total;
+                                        var numberOfResults = jsonSummary[0][4][0].Count;
 
                                         if (numberOfResults > 0)
                                         {
-                                            jsonSummary = SimpleJson.DeserializeObject(jsonSummary.tracks["items"].ToString());
+                                            //jsonSummary = SimpleJson.DeserializeObject(jsonSummary.tracks["items"].ToString());
 
-                                            int mostPopular = SelectTrackByPopularity(jsonSummary, spotifyTitle);
+                                            //int mostPopular = SelectTrackByPopularity(jsonSummary, spotifyTitle);
+
+                                            //OutputControl.UpdateText(
+                                            //    jsonSummary[mostPopular].name.ToString(),
+                                            //    jsonSummary[mostPopular].artists[0].name.ToString(),
+                                            //    jsonSummary[mostPopular].album.name.ToString(),
+                                            //    jsonSummary[mostPopular].id.ToString());
+
+                                            //this.DownloadSpotifyAlbumArtwork(jsonSummary[mostPopular].album);
+
+                                            var track = jsonSummary[0][4][0][0];
 
                                             OutputControl.UpdateText(
-                                                jsonSummary[mostPopular].name.ToString(),
-                                                jsonSummary[mostPopular].artists[0].name.ToString(),
-                                                jsonSummary[mostPopular].album.name.ToString(),
-                                                jsonSummary[mostPopular].id.ToString());
+                                                track.name.ToString(),
+                                                track.artist.ToString(),
+                                                "",
+                                                "");
 
-                                            this.DownloadSpotifyAlbumArtwork(jsonSummary[mostPopular].album);
+                                            this.DownloadLastFMAlbumArtwork(spotifyTitle.Split('(')[0].Trim(), track.image);
+
                                         }
                                         else
                                         {
@@ -346,7 +358,7 @@ namespace Spotify_Display
                         var downloadedJson = jsonWebClient.DownloadString(
                             string.Format(
                                 CultureInfo.InvariantCulture,
-                                "https://api.spotify.com/v1/search?q={0}&type=track",
+                                "http://ws.audioscrobbler.com/2.0/?method=track.search&track={0}&api_key=4dfdd12d416d2446e585c6ddf7565aa6&format=json",
                                 HttpUtility.UrlEncode(spotifyTitle)));
 
                         if (!string.IsNullOrEmpty(downloadedJson))
@@ -357,6 +369,44 @@ namespace Spotify_Display
                     catch (WebException)
                     {
                         this.json = string.Empty;
+                        this.SaveBlankImage();
+                    }
+                }
+
+                this.downloadingJson = false;
+            }
+        }
+
+        private void DownloadAlbumJson(string spotifyTitle)
+        {
+            // Prevent redownloading JSON if it's already attempting to
+            if (!this.downloadingJson)
+            {
+                this.downloadingJson = true;
+
+                using (WebClient jsonWebClient = new WebClient())
+                {
+                    try
+                    {
+                        // There are certain characters that can cause issues with Spotify's search
+                        //spotifyTitle = OutputControl.UnifyTitles(spotifyTitle);
+
+                        jsonWebClient.Encoding = System.Text.Encoding.UTF8;
+
+                        var downloadedJson = jsonWebClient.DownloadString(
+                            string.Format(
+                                CultureInfo.InvariantCulture,
+                                "http://ws.audioscrobbler.com/2.0/?method=album.search&album={0}&api_key=4dfdd12d416d2446e585c6ddf7565aa6&format=json",
+                                HttpUtility.UrlEncode(spotifyTitle)));
+
+                        if (!string.IsNullOrEmpty(downloadedJson))
+                        {
+                            this.albumjson = downloadedJson;
+                        }
+                    }
+                    catch (WebException)
+                    {
+                        this.albumjson = string.Empty;
                         this.SaveBlankImage();
                     }
                 }
@@ -392,11 +442,61 @@ namespace Spotify_Display
 
         private void DownloadSpotifyAlbumArtwork(dynamic jsonSummary)
         {
-            string albumId = jsonSummary.id.ToString();
+            //string albumId = jsonSummary.id.ToString();
 
             // This assumes that the Spotify image array will always have three results (which in all of my tests it has so far)
             string imageUrl = string.Empty;
             imageUrl = jsonSummary.images[0].url.ToString();
+
+            if (Config.chromeBrowser.IsBrowserInitialized && !Config.chromeBrowser.IsDisposed)
+            {
+                string script = "ChangeImage('" + imageUrl + "');";
+                var task = Config.chromeBrowser.EvaluateScriptAsync(script, 1000);
+                task.Wait();
+                var response = task.Result;
+                var result = response.Success ? (response.Result ?? "null") : response.Message;
+            }
+
+        }
+
+        private void DownloadLastFMAlbumArtwork(string qs, dynamic jsonSummary)
+        {
+            //string albumId = jsonSummary.id.ToString();
+
+            // This assumes that the Spotify image array will always have three results (which in all of my tests it has so far)
+            //string imageUrl = string.Empty;
+            //imageUrl = jsonSummary.images[0].url.ToString();
+
+            this.DownloadAlbumJson(qs);
+            
+            dynamic albumjsonSummary = SimpleJson.DeserializeObject(this.albumjson);
+
+            string imageUrl = jsonSummary[3][0].Replace("https://", "http://");
+
+            if (albumjsonSummary != null)
+            {
+                var numberOfResults = albumjsonSummary[0][4][0].Count;
+
+                if (numberOfResults > 0)
+                {
+                    //jsonSummary = SimpleJson.DeserializeObject(jsonSummary.tracks["items"].ToString());
+
+                    //int mostPopular = SelectTrackByPopularity(jsonSummary, spotifyTitle);
+
+                    //OutputControl.UpdateText(
+                    //    jsonSummary[mostPopular].name.ToString(),
+                    //    jsonSummary[mostPopular].artists[0].name.ToString(),
+                    //    jsonSummary[mostPopular].album.name.ToString(),
+                    //    jsonSummary[mostPopular].id.ToString());
+
+                    //this.DownloadSpotifyAlbumArtwork(jsonSummary[mostPopular].album);
+
+                    var track = albumjsonSummary[0][4][0][0];
+
+                    imageUrl = track[3][3][0].Replace("https://", "http://");
+                }
+            }
+            
 
             if (Config.chromeBrowser.IsBrowserInitialized && !Config.chromeBrowser.IsDisposed)
             {
