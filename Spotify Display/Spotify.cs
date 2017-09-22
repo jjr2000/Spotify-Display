@@ -468,10 +468,12 @@ namespace Spotify_Display
             //imageUrl = jsonSummary.images[0].url.ToString();
 
             this.DownloadAlbumJson(qs);
-            
+
             dynamic albumjsonSummary = SimpleJson.DeserializeObject(this.albumjson);
 
-            string imageUrl = jsonSummary[3][0].Replace("https://", "http://");
+            int length = jsonSummary.Count - 1;
+
+            string imageUrl = jsonSummary[length][0].Replace("https://", "http://");
 
             if (albumjsonSummary != null)
             {
@@ -491,9 +493,11 @@ namespace Spotify_Display
 
                     //this.DownloadSpotifyAlbumArtwork(jsonSummary[mostPopular].album);
 
-                    var track = albumjsonSummary[0][4][0][0];
+                    var track = albumjsonSummary[0][4][0][0][3];
 
-                    imageUrl = track[3][3][0].Replace("https://", "http://");
+                    int length2 = track.Count - 1;
+
+                    imageUrl = track[length2][0].Replace("https://", "http://");
                 }
             }
             
